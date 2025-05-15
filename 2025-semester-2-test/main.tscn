@@ -1,0 +1,66 @@
+[gd_scene load_steps=10 format=3 uid="uid://dwogr11r1ljj3"]
+
+[ext_resource type="PackedScene" uid="uid://demyf6gpxd63g" path="res://player.tscn" id="1_ig7tw"]
+[ext_resource type="PackedScene" uid="uid://bvxyf5atdw7s" path="res://enemy.tscn" id="2_1bvp3"]
+[ext_resource type="Script" uid="uid://bvp0vg2jdhsh0" path="res://destination.gd" id="3_lquwl"]
+[ext_resource type="Texture2D" uid="uid://cgb0joi4vle57" path="res://icon.svg" id="4_7mycd"]
+[ext_resource type="Script" uid="uid://djq3xknl5j0tx" path="res://canvas_layer.gd" id="5_lquwl"]
+[ext_resource type="PackedScene" uid="uid://yftg6ykpi631" path="res://spawner.tscn" id="6_7mycd"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_272bh"]
+size = Vector2(130.47, 128.485)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_1bvp3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7mycd"]
+size = Vector2(103, 998)
+
+[node name="Main" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource("1_ig7tw")]
+position = Vector2(191, 97)
+
+[node name="Enemy" parent="." instance=ExtResource("2_1bvp3")]
+position = Vector2(-949, 14)
+
+[node name="Destination" type="StaticBody2D" parent="."]
+script = ExtResource("3_lquwl")
+
+[node name="Sprite2D" type="Sprite2D" parent="Destination"]
+position = Vector2(-301, 302)
+scale = Vector2(0.766458, 7.44834)
+texture = ExtResource("4_7mycd")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Destination"]
+position = Vector2(-301, 301.5)
+scale = Vector2(0.766458, 7.44833)
+shape = SubResource("RectangleShape2D_272bh")
+
+[node name="border" type="CollisionShape2D" parent="Destination"]
+rotation = 3.14159
+shape = SubResource("WorldBoundaryShape2D_1bvp3")
+
+[node name="border2" type="CollisionShape2D" parent="Destination"]
+position = Vector2(0, 649)
+shape = SubResource("WorldBoundaryShape2D_1bvp3")
+
+[node name="hitbox" type="Area2D" parent="Destination"]
+position = Vector2(-298, 290)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Destination/hitbox"]
+position = Vector2(41.5, 20)
+shape = SubResource("RectangleShape2D_7mycd")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+script = ExtResource("5_lquwl")
+
+[node name="lives" type="Label" parent="CanvasLayer"]
+offset_left = 11.0
+offset_top = 5.0
+offset_right = 68.0
+offset_bottom = 28.0
+text = "Lives: 5"
+
+[node name="Spawner" parent="." instance=ExtResource("6_7mycd")]
+
+[connection signal="body_shape_entered" from="Destination/hitbox" to="Destination" method="_on_hitbox_body_shape_entered"]
